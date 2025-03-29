@@ -51,7 +51,7 @@ lotto_analysis/
 python lotto_cli.py --lottery saturday_lotto --action import
 ```
 
-### Scrape Recent Data
+### Scr ape Recent Data
 ```bash
 python lotto_cli.py --lottery saturday_lotto --action scrape --years 5
 ```
@@ -90,6 +90,9 @@ python lotto_cli.py --lottery saturday_lotto --action evaluate
 ```bash
 # Run complete workflow: scrape, analyze, predict, evaluate
 python lotto_cli.py --lottery saturday_lotto --action batch
+
+# Historical Data + With Latest Data (last 2 Years)
+python lotto_cli.py --lottery powerball --action batch --years 2
 ```
 
 ## 📊 Analysis Features
