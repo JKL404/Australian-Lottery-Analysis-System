@@ -57,12 +57,20 @@ python lotto_cli.py --lottery saturday_lotto --action scrape --years 5
 
 ### Analyze Lottery Patterns
 ```bash
+# Text-only analysis output to console
+python lotto_cli.py --lottery saturday_lotto --action analyze
+
+# Generate visualizations (charts, heatmaps, etc.)
 python lotto_cli.py --lottery saturday_lotto --action analyze --visualize
 ```
 
 ### Generate Predictions
 ```bash
-python lotto_cli.py --lottery saturday_lotto --action predict --samples 20
+# Default 10 predictions in CSV format
+python lotto_cli.py --lottery saturday_lotto --action predict
+
+# Custom number of predictions in JSON format
+python lotto_cli.py --lottery saturday_lotto --action predict --samples 20 --format json
 ```
 
 ### Batch Processing
@@ -103,6 +111,5 @@ Each lottery type is configured with appropriate parameters:
 - Draw schedule
 
 
----
 
 ⚠️ **Disclaimer**: This tool is for entertainment and educational purposes only. Lottery outcomes are random and no prediction system can guarantee winnings.
