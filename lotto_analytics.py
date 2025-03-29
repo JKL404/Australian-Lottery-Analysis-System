@@ -25,6 +25,26 @@ logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger('LottoAnalytics')
 
+def ensure_number_format(df):
+    """Ensure main_numbers and supplementary columns are in consistent string format"""
+    df = df.copy()
+    
+    # Convert main_numbers to string format if needed
+    if 'main_numbers' in df.columns:
+        df['main_numbers'] = df['main_numbers'].apply(
+            lambda x: ' '.join(map(str, x)) + ' ' if isinstance(x, list) else 
+                     (str(x) + ' ' if isinstance(x, (int, float)) else x)
+        )
+    
+    # Convert supplementary to string format if needed
+    if 'supplementary' in df.columns:
+        df['supplementary'] = df['supplementary'].apply(
+            lambda x: ' '.join(map(str, x)) + ' ' if isinstance(x, list) else 
+                     (str(x) + ' ' if isinstance(x, (int, float)) else x)
+        )
+    
+    return df
+
 def test_draw_randomness(df, lottery_type, config):
     """Statistical tests to check if draws show any non-random patterns"""
     # Chi-square test for uniform distribution
@@ -281,6 +301,9 @@ def generate_advanced_visualizations(df, lottery_type, config, output_dir=None):
 # Prediction methods
 def simple_frequency_model(data, config, prediction_count):
     """Basic frequency-based prediction model"""
+    # Ensure data format consistency first
+    data = ensure_number_format(data)
+    
     # Process main numbers
     main_numbers = data['main_numbers'].str.strip().str.split()
     main_numbers = main_numbers.explode().astype(int)
@@ -355,6 +378,9 @@ def time_weighted_frequency_model(data, config, prediction_count=10):
     """Prediction model giving higher weight to recent draws"""
     if data.empty:
         return generate_random_predictions(config, prediction_count)
+    
+    # Ensure data format consistency first
+    data = ensure_number_format(data)
     
     # Add recency weight to each draw
     data = data.copy()
@@ -475,6 +501,9 @@ def pattern_based_predictions(data, config, prediction_count=10):
     """Generate predictions based on patterns in recent draws"""
     if len(data) < 5:  # Need enough historical data
         return simple_frequency_model(data, config, prediction_count)
+    
+    # Ensure data format consistency first
+    data = ensure_number_format(data)
     
     # Analyze recent trends
     recent_data = data.head(20)  # Last 20 draws
@@ -627,6 +656,9 @@ def advanced_prediction_engine(data, config, prediction_count=10):
         logger.warning("Empty dataset for predictions")
         return generate_random_predictions(config, prediction_count)
     
+    # Ensure consistent data format
+    data = ensure_number_format(data)
+    
     try:
         # Use three different prediction methods
         predictions = []
@@ -656,6 +688,9 @@ def evaluate_prediction_methods(historical_data, config, methods=['frequency', '
     if len(historical_data) < 50:
         logger.warning("Not enough historical data for proper evaluation")
         return {"insufficient_data": True}
+    
+    # Ensure consistent data format
+    historical_data = ensure_number_format(historical_data)
     
     results = {}
     
@@ -837,18 +872,59 @@ def enhanced_analysis(df, lottery_type, config, visualize=True, save_report=True
         'conditional_probs': {},
     }
     
+    # Ensure consistent data format
+    df = ensure_number_format(df)
+    
     # Basic statistics
     results['basic_stats']['draws'] = len(df)
-    results['basic_stats']['date_range'] = (df['date'].min(), df['date'].max())
+    results['basic_stats']['date_range'] = (
+        str(df['date'].min()),
+        str(df['date'].max())
+    )
     
-    # Frequency analysis
-    main_numbers = df['main_numbers'].str.split().explode().astype(int)
-    # Convert to standard Python types for JSON serialization
-    results['frequencies'] = {int(k): int(v) for k, v in main_numbers.value_counts().to_dict().items()}
-    
-    if config.supplementary > 0:
-        supp_numbers = df['supplementary'].str.split().explode().astype(int)
-        results['supp_frequencies'] = {int(k): int(v) for k, v in supp_numbers.value_counts().to_dict().items()}
+    # Ensure main_numbers and supplementary are in correct string format
+    try:
+        # First check if we need to convert from lists to strings
+        if isinstance(df['main_numbers'].iloc[0], list):
+            df['main_numbers'] = df['main_numbers'].apply(
+                lambda x: ' '.join(map(str, x)) + ' ' if isinstance(x, list) else x
+            )
+        if isinstance(df['supplementary'].iloc[0], list):
+            df['supplementary'] = df['supplementary'].apply(
+                lambda x: ' '.join(map(str, x)) + ' ' if isinstance(x, list) else x
+            )
+            
+        # Now process as usual
+        main_numbers = df['main_numbers'].str.split().explode().astype(int)
+        # Convert to standard Python types for JSON serialization
+        results['frequencies'] = {int(k): int(v) for k, v in main_numbers.value_counts().to_dict().items()}
+        
+        if config.supplementary > 0:
+            supp_numbers = df['supplementary'].str.split().explode().astype(int)
+            results['supp_frequencies'] = {int(k): int(v) for k, v in supp_numbers.value_counts().to_dict().items()}
+    except Exception as e:
+        # Fallback if there's an issue with string processing
+        logger.error(f"Error processing number data: {e}")
+        # Attempt direct conversion from potential list columns
+        if 'main_numbers' in df.columns:
+            # Handle potential list data directly
+            try:
+                all_main_nums = []
+                for nums in df['main_numbers']:
+                    if isinstance(nums, list):
+                        all_main_nums.extend(nums)
+                    elif isinstance(nums, str):
+                        all_main_nums.extend([int(n) for n in nums.split() if n.strip()])
+                
+                main_counter = {}
+                for num in all_main_nums:
+                    if num not in main_counter:
+                        main_counter[num] = 0
+                    main_counter[num] += 1
+                
+                results['frequencies'] = main_counter
+            except:
+                results['frequencies'] = {}
     
     # Number distribution analysis
     main_range = range(config.main_range[0], config.main_range[1] + 1)
@@ -938,10 +1014,16 @@ def enhanced_analysis(df, lottery_type, config, visualize=True, save_report=True
         output_dir.mkdir(parents=True, exist_ok=True)
         timestamp = datetime.now().strftime("%Y%m%d")
         
+        # Convert any Timestamp objects to strings before serialization
+        def json_serializable(obj):
+            if isinstance(obj, pd.Timestamp):
+                return str(obj)
+            return obj
+        
         # Full JSON results
         with open(output_dir / f"{lottery_type}_analysis_{timestamp}.json", "w") as f:
             import json
-            json.dump(results, f, indent=2)
+            json.dump(results, f, indent=2, default=json_serializable)
         
         # Generate detailed text report
         txt_report_path = generate_detailed_report(results, lottery_type, df, config, output_dir)

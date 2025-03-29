@@ -1,0 +1,92 @@
+[
+  {
+    "generated": "2025-03-30T02:08:52.380541",
+    "combination": 1,
+    "main_numbers": "9 12 17 25 30 32 33",
+    "supplementary": "9",
+    "probability": 1.5614509826566993e-12,
+    "confidence_score": -23.025850929940457,
+    "prediction_method": "Time Weighted"
+  },
+  {
+    "generated": "2025-03-30T02:08:52.380546",
+    "combination": 2,
+    "main_numbers": "3 6 9 16 17 22 30",
+    "supplementary": "2",
+    "probability": 2.6956316803084135e-12,
+    "confidence_score": -23.025850929940457,
+    "prediction_method": "Time Weighted"
+  },
+  {
+    "generated": "2025-03-30T02:08:52.380548",
+    "combination": 3,
+    "main_numbers": "4 9 13 17 19 20 23",
+    "supplementary": "2",
+    "probability": 1.847048018688308e-12,
+    "confidence_score": -23.025850929940457,
+    "prediction_method": "Time Weighted"
+  },
+  {
+    "generated": "2025-03-30T02:08:52.380551",
+    "combination": 4,
+    "main_numbers": "1 2 9 11 14 19 26",
+    "supplementary": "16",
+    "probability": 1.946420696162208e-05,
+    "confidence_score": -10.846933319492827,
+    "prediction_method": "Pattern Based"
+  },
+  {
+    "generated": "2025-03-30T02:08:52.380554",
+    "combination": 5,
+    "main_numbers": "2 5 9 15 20 21 31",
+    "supplementary": "20",
+    "probability": 1.0348317215157733e-05,
+    "confidence_score": -11.478686639379209,
+    "prediction_method": "Pattern Based"
+  },
+  {
+    "generated": "2025-03-30T02:08:52.380556",
+    "combination": 6,
+    "main_numbers": "1 9 11 19 22 23 31",
+    "supplementary": "11",
+    "probability": 1.460135867858352e-05,
+    "confidence_score": -11.13439597340286,
+    "prediction_method": "Pattern Based"
+  },
+  {
+    "generated": "2025-03-30T02:08:52.380559",
+    "combination": 7,
+    "main_numbers": "6 7 18 22 24 25 34",
+    "supplementary": "12",
+    "probability": 4.03247379234923e-13,
+    "confidence_score": -23.025850929940457,
+    "prediction_method": "Frequency"
+  },
+  {
+    "generated": "2025-03-30T02:08:52.380561",
+    "combination": 8,
+    "main_numbers": "12 14 20 23 32 33 34",
+    "supplementary": "10",
+    "probability": 6.127039578436656e-13,
+    "confidence_score": -23.025850929940457,
+    "prediction_method": "Frequency"
+  },
+  {
+    "generated": "2025-03-30T02:08:52.380564",
+    "combination": 9,
+    "main_numbers": "2 3 7 8 13 21 30",
+    "supplementary": "3",
+    "probability": 1.401677298281985e-12,
+    "confidence_score": -23.025850929940457,
+    "prediction_method": "Frequency"
+  },
+  {
+    "generated": "2025-03-30T02:08:52.380566",
+    "combination": 10,
+    "main_numbers": "7 24 25 27 33 34 35",
+    "supplementary": "16",
+    "probability": 4.935318763682093e-13,
+    "confidence_score": -23.025850929940457,
+    "prediction_method": "Frequency"
+  }
+]

@@ -251,7 +251,6 @@ def save_predictions_with_model(manager, predictions, lottery_type, format="csv"
 
 def handle_import(args, manager):
     """Import existing historical data"""
-    # Fix the path to look in historical_data directory
     source = Path(f"historical_data/{args.lottery}.csv")
     if not source.exists():
         raise FileNotFoundError(f"Source file {source} not found")
@@ -259,16 +258,33 @@ def handle_import(args, manager):
     print(f"📥 Importing historical data from {source}")
     df = pd.read_csv(source)
     
-    # Convert to universal format
-    data = [{
-        "date": row["DRAW DATE"],
-        "draw": row["DRAW ID"],
-        "main_numbers": list(map(int, row["MAIN NUMBERS"].strip().split())),
-        "supplementary": list(map(int, row["SUPP"].strip().split()))
-    } for _, row in df.iterrows()]
+    # Convert to universal format with proper type handling
+    data = []
+    for _, row in df.iterrows():
+        try:
+            # Handle MAIN NUMBERS regardless of type
+            main_str = str(row["MAIN NUMBERS"])
+            main_numbers = [int(n) for n in main_str.split() if n.strip()] if ' ' in main_str else [int(main_str)]
+            
+            # Handle SUPP regardless of type
+            supp_str = str(row["SUPP"])
+            supp_numbers = [int(n) for n in supp_str.split() if n.strip()] if ' ' in supp_str else [int(supp_str)]
+            
+            data.append({
+                "date": row["DRAW DATE"],
+                "draw": row["DRAW ID"],
+                "main_numbers": main_numbers,
+                "supplementary": supp_numbers
+            })
+        except Exception as e:
+            print(f"⚠️ Error processing row: {e}")
+            continue
 
-    manager.save_dataset(data, args.lottery)
-    print(f"✅ Imported {len(data)} historical records")
+    if data:
+        manager.save_dataset(data, args.lottery)
+        print(f"✅ Imported {len(data)} historical records")
+    else:
+        print("❌ No data could be imported")
 
 
 def handle_evaluate(args, manager):
@@ -327,8 +343,22 @@ def handle_batch(args, manager):
     """Handle batch processing - scrape, analyze, predict in sequence"""
     print(f"🔄 Starting batch processing for {args.lottery}")
     
+    # Step 0: Import historical data if available
+    print("\n📥 STEP 0: Importing historical data...")
+    try:
+        source = Path(f"historical_data/{args.lottery}.csv")
+        if source.exists():
+            # Use the existing handle_import function
+            import_args = argparse.Namespace()
+            import_args.lottery = args.lottery
+            handle_import(import_args, manager)
+        else:
+            print(f"⚠️ No historical data file found at {source}")
+    except Exception as e:
+        print(f"⚠️ Error importing historical data: {str(e)}")
+    
     # Step 1: Scrape recent data
-    print(f"\n📥 STEP 1: Scraping recent data...")
+    print("\n📥 STEP 1: Scraping recent data...")
     scraper = UniversalLottoScraper(args.lottery)
     data = scraper.scrape(years_back=args.years)
     
@@ -340,6 +370,10 @@ def handle_batch(args, manager):
     
     # Step 2: Merge and analyze
     print(f"\n📊 STEP 2: Analyzing historical data...")
+    
+    # Create the output directory before merging
+    Path(f"results/historical/{args.lottery}").mkdir(parents=True, exist_ok=True)
+    
     merged = manager.merge_historical_data(args.lottery)
     
     if merged is None or merged.empty:

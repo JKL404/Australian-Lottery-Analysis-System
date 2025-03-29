@@ -163,6 +163,10 @@ class LottoDataManager:
                 (self.output_root / "historical" / "individual" / lottery_type, "*.csv"),
             ]
             
+            # Make sure directories exist
+            for path, _ in search_paths:
+                path.mkdir(parents=True, exist_ok=True)
+            
             # Exclude temporary/backup files
             excluded_patterns = ['combined_20', 'historical_imported']
             all_files = [
