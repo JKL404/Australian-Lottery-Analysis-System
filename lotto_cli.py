@@ -38,7 +38,7 @@ def main():
                        help='Output format for predictions')
     parser.add_argument('--visualize', action='store_true',
                        help='Generate visualizations during analysis')
-    parser.add_argument('--samples', type=int, default=10,
+    parser.add_argument('--prediction-count', type=int, default=10,
                        help='Number of predictions to generate')
 
     args = parser.parse_args()
@@ -277,18 +277,18 @@ def handle_prediction(args, manager):
     historical = manager.merge_historical_data(args.lottery)
     
     # Generate predictions (improved logic)
-    predictions = generate_predictions(historical, config)
+    predictions = generate_predictions(historical, config, args.prediction_count)
     
     # Save predictions
     output_file = manager.save_predictions(predictions, args.lottery, format=args.format)
     print(f"✅ Predictions saved to {output_file}")
 
 
-def generate_predictions(data, config):
-    """Fixed prediction logic that avoids numpy boolean issues"""
+def generate_predictions(data, config, prediction_count=10):
+    """Prediction logic with configurable output count"""
     if data.empty:
         logger.warning("Empty dataset for predictions")
-        return generate_random_predictions(config)
+        return generate_random_predictions(config, prediction_count)
         
     try:
         # Process main numbers
@@ -307,7 +307,7 @@ def generate_predictions(data, config):
         
         # Generate predictions
         predictions = []
-        for i in range(10):
+        for i in range(prediction_count):
             # Select main numbers
             main_nums = []
             available_nums = list(main_probs.index)
@@ -362,17 +362,17 @@ def generate_predictions(data, config):
         
     except Exception as e:
         logger.error(f"Error in prediction: {str(e)}")
-        return generate_random_predictions(config)
+        return generate_random_predictions(config, prediction_count)
 
 
-def generate_random_predictions(config):
+def generate_random_predictions(config, prediction_count=10):
     """Fallback random predictions"""
     return [{
         "main": sorted(random.sample(range(config.main_range[0], config.main_range[1]+1), config.main_numbers)),
         "supp": sorted(random.sample(range(config.supp_range[0], config.supp_range[1]+1), config.supplementary)),
         "probability": 0.0001,
         "confidence_score": -9.0
-    } for _ in range(10)]
+    } for _ in range(prediction_count)]
 
 
 def handle_import(args, manager):
@@ -398,4 +398,4 @@ def handle_import(args, manager):
 
 
 if __name__ == "__main__":
-    main() 
+    main()

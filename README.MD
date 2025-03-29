@@ -70,7 +70,7 @@ python lotto_cli.py --lottery saturday_lotto --action analyze --visualize
 python lotto_cli.py --lottery saturday_lotto --action predict
 
 # Custom number of predictions in JSON format
-python lotto_cli.py --lottery saturday_lotto --action predict --samples 20 --format json
+python lotto_cli.py --lottery saturday_lotto --action predict --prediction-count 20 --format json
 ```
 
 ### Batch Processing
@@ -111,5 +111,6 @@ Each lottery type is configured with appropriate parameters:
 - Draw schedule
 
 
+---
 
 ⚠️ **Disclaimer**: This tool is for entertainment and educational purposes only. Lottery outcomes are random and no prediction system can guarantee winnings.
