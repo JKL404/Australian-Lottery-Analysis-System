@@ -152,6 +152,9 @@ Apply chi-square tests and other statistical methods to validate the randomness 
 ### Model Evaluation
 Compare the performance of different prediction models against historical data to determine the most effective approach.
 
+### NOTE:
+While running this app, it will open the Chrome browser to fetch the latest data from the lottery website. For some regions, it may display data that is not available in your state (especially Queensland). In such cases, you can quickly switch to another region (New South Wales) within 2-3 seconds of the browser loading.
+
 ---
 
 ⚠️ **Disclaimer**: This tool is for entertainment and educational purposes only. Lottery outcomes are random and no prediction system can guarantee winnings.
