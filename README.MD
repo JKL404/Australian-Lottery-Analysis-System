@@ -31,6 +31,7 @@ lotto_analysis/
 ├── lotto_core.py         # Core lottery definitions and validators
 ├── lotto_data_manager.py # Data processing and storage
 ├── lotto_scraper.py      # Web scraping functionality
+├── lotto_analytics.py    # Advanced analysis and prediction algorithms
 ├── historical/           # Historical lottery data
 │   ├── monday_lotto.csv
 │   ├── oz_lotto.csv
@@ -62,6 +63,9 @@ python lotto_cli.py --lottery saturday_lotto --action analyze
 
 # Generate visualizations (charts, heatmaps, etc.)
 python lotto_cli.py --lottery saturday_lotto --action analyze --visualize
+
+# Generate interactive visualizations
+python lotto_cli.py --lottery saturday_lotto --action analyze --visualize --interactive
 ```
 
 ### Generate Predictions
@@ -71,10 +75,20 @@ python lotto_cli.py --lottery saturday_lotto --action predict
 
 # Custom number of predictions in JSON format
 python lotto_cli.py --lottery saturday_lotto --action predict --prediction-count 20 --format json
+
+# Use specific prediction model
+python lotto_cli.py --lottery saturday_lotto --action predict --model time_weighted
+```
+
+### Evaluate Prediction Models
+```bash
+# Compare performance of different prediction models
+python lotto_cli.py --lottery saturday_lotto --action evaluate
 ```
 
 ### Batch Processing
 ```bash
+# Run complete workflow: scrape, analyze, predict, evaluate
 python lotto_cli.py --lottery saturday_lotto --action batch
 ```
 
@@ -85,22 +99,36 @@ python lotto_cli.py --lottery saturday_lotto --action batch
 - Number pair correlation detection
 - Time-based pattern analysis
 - Visualization through heatmaps and charts
+- Statistical randomness testing
+- Number cluster detection using machine learning
+- Time-series decomposition for trend analysis
 
 ## 📈 Results
 
 ### Analysis Results
+- **Detailed Text Reports**: Comprehensive analysis with statistics, patterns, and recommendations (`results/analysis/reports/lottery_type_detailed_analysis_YYYYMMDD.txt`)
 - **Frequency Reports**: Visualizations of number frequencies as heatmaps and bar charts (`results/analysis/frequency_reports/`)
 - **Temporal Analysis**: Time-series charts showing draw patterns and trends (`results/analysis/temporal_analysis/`)
 - **Number Distribution**: Charts showing the distribution of drawn numbers across the possible range
 - **Common Pairs**: Reports on frequently occurring number pairs
+- **Interactive Visualizations**: Web-based interactive charts for detailed exploration (`results/analysis/interactive/`)
+- **JSON Data**: Machine-readable structured data for further analysis (`results/analysis/reports/lottery_type_analysis_YYYYMMDD.json`)
 
 ### Prediction Results
-- **CSV Format**: Structured predictions with probabilities and confidence scores (`results/predictions/lottery_type_YYYYMMDD.csv`)
+- **CSV Format**: Structured predictions with probabilities, confidence scores, and prediction method (`results/predictions/lottery_type_YYYYMMDD.csv`)
 - **JSON Format**: Detailed prediction data with metadata (`results/predictions/lottery_type_YYYYMMDD.json`)
+- **Model Evaluation**: Performance reports comparing prediction methods (`results/analysis/evaluation/`)
 
 ### Historical Data
 - **Combined Data**: Merged historical datasets (`results/historical/combined_results.csv`)
 - **Individual Files**: Processed lottery-specific data files (`results/historical/individual/`)
+
+## 🧠 Prediction Methods
+
+- **Frequency-Based**: Traditional prediction based on historical frequency
+- **Time-Weighted**: Enhanced predictions giving more weight to recent draws
+- **Pattern-Based**: Predictions leveraging detected number patterns and clusters
+- **Advanced (Ensemble)**: Combination of multiple models for optimal results
 
 ## ⚙️ Configuration
 
@@ -110,6 +138,16 @@ Each lottery type is configured with appropriate parameters:
 - Supplementary numbers
 - Draw schedule
 
+## 🎯 Advanced Features
+
+### Interactive Visualizations
+Generate interactive web-based charts and heatmaps that allow for detailed exploration of lottery patterns.
+
+### Statistical Testing
+Apply chi-square tests and other statistical methods to validate the randomness of lottery draws.
+
+### Model Evaluation
+Compare the performance of different prediction models against historical data to determine the most effective approach.
 
 ---
 

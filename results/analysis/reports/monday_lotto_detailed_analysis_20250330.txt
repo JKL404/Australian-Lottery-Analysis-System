@@ -1,0 +1,105 @@
+================================================================================
+Monday Lotto Lottery Analysis Report
+Generated on: 2025-03-30 01:34:10
+================================================================================
+
+Dataset Information:
+________________________________________
+Date Range: 2002-01-01 to 2024-05-13
+Total Draws: 1084
+Lottery Configuration: 6 main numbers from (1, 45), 2 supplementary from (1, 45)
+
+Number Frequency Analysis:
+________________________________________
+Top 20 Main Numbers by Frequency:
+Number 13: 183 times **************************************************
+Number 20: 173 times ***********************************************
+Number 24: 167 times *********************************************
+Number 39: 161 times *******************************************
+Number 14: 160 times *******************************************
+Number  4: 160 times *******************************************
+Number 18: 159 times *******************************************
+Number 28: 157 times ******************************************
+Number 42: 157 times ******************************************
+Number 38: 151 times *****************************************
+Number 34: 150 times ****************************************
+Number 32: 150 times ****************************************
+Number 21: 149 times ****************************************
+Number 11: 149 times ****************************************
+Number 40: 148 times ****************************************
+Number 35: 145 times ***************************************
+Number 17: 145 times ***************************************
+Number 31: 145 times ***************************************
+Number 41: 144 times ***************************************
+Number 22: 143 times ***************************************
+
+Top 10 Supplementary Numbers by Frequency:
+Number 12:  61 times **************************************************
+Number 38:  59 times ************************************************
+Number 24:  59 times ************************************************
+Number 23:  58 times ***********************************************
+Number 29:  58 times ***********************************************
+Number 25:  57 times **********************************************
+Number 37:  56 times *********************************************
+Number 40:  56 times *********************************************
+Number 44:  55 times *********************************************
+Number 14:  54 times ********************************************
+
+Statistical Analysis:
+________________________________________
+Most frequently drawn main number: 13 (183 times)
+Least frequently drawn main number: 12 (120 times)
+
+Randomness Testing Results:
+Chi-Square Statistic: 46.53
+P-Value: 0.3686
+Interpretation: The distribution appears to be random (null hypothesis not rejected)
+
+Number Patterns and Clusters:
+________________________________________
+Number groups that frequently appear together:
+Group 1: [3, 13, 14, 17, 18, 20, 21, 24, 28, 39, 42, 44]
+Group 2: [1, 5, 9, 10, 11, 12, 15, 19, 25, 26, 27, 31, 33, 34, 35, 36, 37, 43]
+Group 3: [2, 4, 6, 7, 8, 16, 22, 23, 29, 30, 32, 38, 40, 41, 45]
+
+Most Common Number Pairs:
+(13, 14): 31 times
+(13, 39): 30 times
+(11, 40): 30 times
+(14, 18): 28 times
+(4, 29): 28 times
+(24, 29): 28 times
+(3, 4): 27 times
+(22, 24): 27 times
+(13, 41): 27 times
+(21, 41): 27 times
+
+Temporal Analysis:
+________________________________________
+Trend direction: decreasing
+Seasonality detected: No
+
+Recent Draw History (Last 10 Draws):
+________________________________________
+Date: 2024-05-13, Draw: 4390, Main: 6 8 34 37 39 45 , Supp: 22 43 
+Date: 2024-05-06, Draw: 4388, Main: 1 2 21 26 32 40 , Supp: 14 42 
+Date: 2024-04-29, Draw: 4386, Main: 10 23 28 32 34 43 , Supp: 4 20 
+Date: 2024-04-22, Draw: 4384, Main: 4 6 8 14 25 34 , Supp: 7 37 
+Date: 2024-04-15, Draw: 4382, Main: 5 14 21 29 32 45 , Supp: 12 22 
+Date: 2024-04-08, Draw: 4380, Main: 1 9 12 16 22 43 , Supp: 15 32 
+Date: 2024-04-01, Draw: 4378, Main: 4 5 13 30 31 34 , Supp: 15 22 
+Date: 2024-03-25, Draw: 4376, Main: 4 11 19 31 32 35 , Supp: 25 43 
+Date: 2024-03-18, Draw: 4374, Main: 2 4 16 27 34 39 , Supp: 11 18 
+Date: 2024-03-11, Draw: 4372, Main: 3 5 13 16 19 35 , Supp: 40 44 
+
+
+Analysis Conclusions:
+________________________________________
+• The draw distribution appears random, consistent with expected lottery behavior
+• Lower and higher numbers appear with similar frequencies
+• Consider using numbers from the same cluster groups for better correlation
+
+================================================================================
+DISCLAIMER: This analysis is for entertainment purposes only. Lottery outcomes
+are random and no prediction system can guarantee winnings.
+================================================================================
