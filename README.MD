@@ -78,6 +78,22 @@ python lotto_cli.py --lottery saturday_lotto --action batch
 - Time-based pattern analysis
 - Visualization through heatmaps and charts
 
+## 📈 Results
+
+### Analysis Results
+- **Frequency Reports**: Visualizations of number frequencies as heatmaps and bar charts (`results/analysis/frequency_reports/`)
+- **Temporal Analysis**: Time-series charts showing draw patterns and trends (`results/analysis/temporal_analysis/`)
+- **Number Distribution**: Charts showing the distribution of drawn numbers across the possible range
+- **Common Pairs**: Reports on frequently occurring number pairs
+
+### Prediction Results
+- **CSV Format**: Structured predictions with probabilities and confidence scores (`results/predictions/lottery_type_YYYYMMDD.csv`)
+- **JSON Format**: Detailed prediction data with metadata (`results/predictions/lottery_type_YYYYMMDD.json`)
+
+### Historical Data
+- **Combined Data**: Merged historical datasets (`results/historical/combined_results.csv`)
+- **Individual Files**: Processed lottery-specific data files (`results/historical/individual/`)
+
 ## ⚙️ Configuration
 
 Each lottery type is configured with appropriate parameters:
@@ -86,13 +102,6 @@ Each lottery type is configured with appropriate parameters:
 - Supplementary numbers
 - Draw schedule
 
-## 📝 License
-
-[Your License]
-
-## 📧 Contact
-
-[Your Contact Information]
 
 ---
 
