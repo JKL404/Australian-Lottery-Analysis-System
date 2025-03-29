@@ -1,0 +1,79 @@
+
+🔍 Monday Lotto Analysis
+📅 Date Range: 2002-01-01 00:00:00 to 2024-05-13 00:00:00
+🎰 Total Draws: 1084
+
+🏆 Top 10 Frequent Main Numbers:
+main_numbers
+13    183
+20    173
+24    167
+39    161
+14    160
+4     160
+18    159
+28    157
+42    157
+38    151
+Name: count, dtype: int64
+
+🏅 Top 5 Frequent Supplementary Numbers:
+supplementary
+12    61
+38    59
+24    59
+23    58
+29    58
+Name: count, dtype: int64
+
+📈 Recent Trends (Last 10 Draws):
+      date  draw       main_numbers
+2024-05-13  4390   6 8 34 37 39 45 
+2024-05-06  4388   1 2 21 26 32 40 
+2024-04-29  4386 10 23 28 32 34 43 
+2024-04-22  4384    4 6 8 14 25 34 
+2024-04-15  4382  5 14 21 29 32 45 
+2024-04-08  4380   1 9 12 16 22 43 
+2024-04-01  4378   4 5 13 30 31 34 
+2024-03-25  4376  4 11 19 31 32 35 
+2024-03-18  4374   2 4 16 27 34 39 
+2024-03-11  4372   3 5 13 16 19 35 
+
+📊 Statistics:
+Most drawn main number: 13 (183 times)
+Least drawn main number: 12 (120 times)
+
+📆 Draws per Year:
+year
+2002    52
+2003    52
+2004    52
+2005    52
+2006    52
+2007    52
+2008    53
+2009    52
+2010    52
+2011    52
+2012    52
+2013    53
+2014    52
+2015    52
+2016    51
+2017    52
+2018    53
+2019    52
+2020    52
+2021    52
+2022    13
+2023    18
+2024    11
+dtype: int64
+
+👫 Common Number Pairs:
+(13, 14)    31
+(13, 39)    30
+(11, 40)    30
+(14, 18)    28
+(4, 29)     28
+Name: count, dtype: int64

@@ -110,7 +110,7 @@ def handle_analysis(args, manager):
     perform_analysis(df, args.lottery, visualize=args.visualize)
 
 
-def perform_analysis(df, lottery_type, visualize=True):
+def perform_analysis(df, lottery_type, visualize=True, save_report=True):
     """Core analysis logic"""
     config = LOTTERY_TYPES[lottery_type]
     
@@ -166,6 +166,38 @@ def perform_analysis(df, lottery_type, visualize=True):
     # Generate visualizations
     if visualize:
         generate_visualizations(df, lottery_type, all_main_counts, main_freq, supp_freq if config.supplementary > 0 else None)
+
+    # Create a report string with all the output
+    report = []
+    report.append(f"\n🔍 {lottery_type.replace('_', ' ').title()} Analysis")
+    report.append(f"📅 Date Range: {df['date'].min()} to {df['date'].max()}")
+    report.append(f"🎰 Total Draws: {len(df)}")
+    report.append("\n🏆 Top 10 Frequent Main Numbers:")
+    report.append(str(main_freq))
+    if config.supplementary > 0:
+        report.append("\n🏅 Top 5 Frequent Supplementary Numbers:")
+        report.append(str(supp_freq))
+    report.append("\n📈 Recent Trends (Last 10 Draws):")
+    report.append(recent[['date', 'draw', 'main_numbers']].to_string(index=False))
+    report.append("\n📊 Statistics:")
+    report.append(f"Most drawn main number: {all_main_counts.idxmax()} ({all_main_counts.max()} times)")
+    report.append(f"Least drawn main number: {all_main_counts.idxmin()} ({all_main_counts.min()} times)")
+    if 'date' in df.columns:
+        report.append("\n📆 Draws per Year:")
+        report.append(str(yearly_counts))
+    report.append("\n👫 Common Number Pairs:")
+    report.append(str(pair_counts))
+    
+    # Print to console
+    print("\n".join(report))
+    
+    # Save to file
+    if save_report:
+        output_dir = Path(f"results/analysis/reports")
+        output_dir.mkdir(parents=True, exist_ok=True)
+        timestamp = datetime.now().strftime("%Y%m%d")
+        with open(output_dir / f"{lottery_type}_analysis_{timestamp}.txt", "w") as f:
+            f.write("\n".join(report))
 
 
 def generate_visualizations(df, lottery_type, all_counts, main_freq, supp_freq):
