@@ -10,6 +10,7 @@ A comprehensive tool for analyzing lottery data, visualizing patterns, and gener
 - **Prediction Generation**: Statistical models to generate potential number combinations
 - **Visualization**: Charts and heatmaps showing number frequencies and patterns
 - **Data Management**: Import, export, and merge historical lottery datasets
+- **GUI Interface**: User-friendly graphical interface for easy analysis and prediction
 
 ## 🚀 Installation
 
@@ -40,6 +41,7 @@ lotto_analysis/
 ├── lotto_data_manager.py # Data processing and storage
 ├── lotto_scraper.py      # Web scraping functionality
 ├── lotto_analytics.py    # Advanced analysis and prediction algorithms
+├── lotto_gui.py          # GUI interface
 ├── historical/           # Historical lottery data
 │   ├── monday_lotto.csv
 │   ├── oz_lotto.csv
@@ -50,9 +52,31 @@ lotto_analysis/
     ├── historical/       # Processed historical data
     ├── predictions/      # Generated number predictions
     └── analysis/         # Analysis reports and visualizations
+
 ```
 
 ## 🔧 Usage
+
+### Graphical User Interface (GUI)
+```bash
+# Launch the GUI application
+python3 lotto_gui.py
+```
+
+The GUI provides an easy-to-use interface with the following features:
+- Select from six Australian lottery types
+- Specify how many years of historical data to analyze
+- Control the number of predictions to generate
+- Choose prediction model (frequency, time-weighted, pattern, or advanced ensemble)
+- Select output format (CSV or JSON)
+- Enable/disable visualizations and interactive charts
+- Generate detailed analysis reports
+- View real-time progress and logs during processing
+- Access predictions and analysis reports with one click
+
+![GUI Screenshot](screenshots/gui_screenshot.png)
+
+### Command Line Interface
 
 ### Import Historical Data
 ```bash
