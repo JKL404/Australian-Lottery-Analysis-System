@@ -223,6 +223,14 @@ def save_predictions_with_model(manager, predictions, lottery_type, format="csv"
         filename = f"{lottery_type}_predictions_{datetime.now().strftime('%Y%m%d')}.{format}"
         path = Path(manager.output_root) / "predictions" / filename
         
+        # Ensure the predictions directory exists
+        path.parent.mkdir(parents=True, exist_ok=True)
+        
+        # Delete the file if it already exists
+        if path.exists():
+            path.unlink()
+            logger.info(f"Deleted existing file: {path}")
+        
         # Include model information in the record
         records = [{
             "generated": datetime.now().isoformat(),

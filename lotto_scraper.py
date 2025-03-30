@@ -146,7 +146,7 @@ class UniversalLottoScraper:
         
         try:
             # Check if the state restriction message is present
-            restriction_text = "not available in Queensland"
+            restriction_text = "is not available in"
             try:
                 state_message = driver.find_element(By.XPATH, f"//*[contains(text(), '{restriction_text}')]")
                 if state_message:
