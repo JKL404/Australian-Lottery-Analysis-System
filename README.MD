@@ -1,4 +1,3 @@
-
 # Australian Lottery Analysis System
 
 A comprehensive tool for analyzing lottery data, visualizing patterns, and generating predictions for various Australian lottery games.
@@ -22,6 +21,15 @@ cd lottery-analysis
 # Install dependencies
 pip install -r requirements.txt
 ```
+
+### Prerequisites
+
+- **Firefox Browser**: Required for web scraping functionality
+  - **macOS**: `brew install --cask firefox` or download from [Firefox website](https://www.mozilla.org/firefox/new/)
+  - **Windows**: Download and install from [Firefox website](https://www.mozilla.org/firefox/new/)
+  - **Linux**: Use your distribution's package manager (e.g., `sudo apt install firefox`)
+
+- **Python 3.7+**: Required for running the application
 
 ## 📁 Project Structure
 
@@ -48,51 +56,53 @@ lotto_analysis/
 
 ### Import Historical Data
 ```bash
-python lotto_cli.py --lottery saturday_lotto --action import
+python3 lotto_cli.py --lottery saturday_lotto --action import
 ```
 
-### Scr ape Recent Data
+### Scrape Recent Data
 ```bash
-python lotto_cli.py --lottery saturday_lotto --action scrape --years 5
+python3 lotto_cli.py --lottery saturday_lotto --action scrape --years 5
 ```
+
+**Note**: The scraping functionality requires Firefox to be installed on your system. For some regions (especially QLD), you may see a message that the lottery is not available in your state. The scraper will automatically attempt to switch to another state (NSW by default).
 
 ### Analyze Lottery Patterns
 ```bash
 # Text-only analysis output to console
-python lotto_cli.py --lottery saturday_lotto --action analyze
+python3 lotto_cli.py --lottery saturday_lotto --action analyze
 
 # Generate visualizations (charts, heatmaps, etc.)
-python lotto_cli.py --lottery saturday_lotto --action analyze --visualize
+python3 lotto_cli.py --lottery saturday_lotto --action analyze --visualize
 
 # Generate interactive visualizations
-python lotto_cli.py --lottery saturday_lotto --action analyze --visualize --interactive
+python3 lotto_cli.py --lottery saturday_lotto --action analyze --visualize --interactive
 ```
 
 ### Generate Predictions
 ```bash
 # Default 10 predictions in CSV format
-python lotto_cli.py --lottery saturday_lotto --action predict
+python3 lotto_cli.py --lottery saturday_lotto --action predict
 
 # Custom number of predictions in JSON format
-python lotto_cli.py --lottery saturday_lotto --action predict --prediction-count 20 --format json
+python3 lotto_cli.py --lottery saturday_lotto --action predict --prediction-count 20 --format json
 
 # Use specific prediction model
-python lotto_cli.py --lottery saturday_lotto --action predict --model time_weighted
+python3 lotto_cli.py --lottery saturday_lotto --action predict --model time_weighted
 ```
 
 ### Evaluate Prediction Models
 ```bash
 # Compare performance of different prediction models
-python lotto_cli.py --lottery saturday_lotto --action evaluate
+python3 lotto_cli.py --lottery saturday_lotto --action evaluate
 ```
 
 ### Batch Processing
 ```bash
 # Run complete workflow: scrape, analyze, predict, evaluate
-python lotto_cli.py --lottery saturday_lotto --action batch
+python3 lotto_cli.py --lottery saturday_lotto --action batch
 
 # Historical Data + With Latest Data (last 2 Years)
-python lotto_cli.py --lottery powerball --action batch --years 2
+python3 lotto_cli.py --lottery powerball --action batch --years 2
 ```
 
 ## 📊 Analysis Features

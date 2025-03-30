@@ -14,6 +14,7 @@ import time
 import argparse
 import pandas as pd
 from lotto_core import LOTTERY_TYPES, LotteryValidator
+import platform
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, 
@@ -31,23 +32,49 @@ class UniversalLottoScraper:
         self.validator = LotteryValidator(lottery_type)
         self.results = []
         
-    def scrape_with_selenium(self, start_date=None, end_date=None, years_back=3):
+    def scrape_with_selenium(self, start_date=None, end_date=None, years_back=3, preferred_state="NSW"):
         """Scrape lottery results using Selenium with date range filtering"""
         from selenium import webdriver
-        from selenium.webdriver.chrome.options import Options
-        from selenium.webdriver.chrome.service import Service
+        from selenium.webdriver.firefox.options import Options
+        from selenium.webdriver.firefox.service import Service
         from selenium.webdriver.common.by import By
-        from webdriver_manager.chrome import ChromeDriverManager
+        from selenium.webdriver.support.ui import WebDriverWait
+        from selenium.webdriver.support import expected_conditions as EC
+        from webdriver_manager.firefox import GeckoDriverManager
         
-        logger.info(f"Setting up Chrome WebDriver for {self.config.name}...")
+        logger.info(f"Setting up Firefox WebDriver for {self.config.name}...")
         options = Options()
-        options.headless = True
-        options.add_argument("--no-sandbox")
-        options.add_argument("--disable-dev-shm-usage")
-        options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36")
+        options.headless = True  # Set to False to show the browser window
         
-        # Setup driver with webdriver_manager
-        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+        # Common Firefox locations on macOS
+        mac_firefox_paths = [
+            '/Applications/Firefox.app/Contents/MacOS/firefox-bin',
+            '/Applications/Firefox.app/Contents/MacOS/firefox',
+            '/usr/local/bin/firefox',
+            '/opt/homebrew/bin/firefox'
+        ]
+        
+        # Find Firefox binary
+        firefox_path = None
+        if platform.system() == 'Darwin':  # macOS
+            for path in mac_firefox_paths:
+                if os.path.exists(path):
+                    firefox_path = path
+                    break
+            if not firefox_path:
+                logger.error("Firefox not found. Please install Firefox using: brew install --cask firefox")
+                raise RuntimeError("Firefox not found. Install using: brew install --cask firefox")
+        elif platform.system() == 'Linux':
+            firefox_path = '/usr/bin/firefox'
+        elif platform.system() == 'Windows':
+            firefox_path = r'C:\Program Files\Mozilla Firefox\firefox.exe'
+        
+        logger.info(f"Using Firefox binary at: {firefox_path}")
+        options.binary_location = firefox_path
+        
+        # Setup Firefox driver
+        service = Service(GeckoDriverManager().install())
+        driver = webdriver.Firefox(service=service, options=options)
         
         try:
             # Handle date range
@@ -81,6 +108,12 @@ class UniversalLottoScraper:
                     driver.get(url)
                     time.sleep(5)  # Wait for page to load
                     
+                    # Check for state restriction message and handle it
+                    self._handle_state_restriction(driver, preferred_state)
+                    
+                    # Add a longer wait after state handling to ensure the page has updated
+                    time.sleep(5)  # Give more time for the page to refresh after state change
+                    
                     # Find all date headers and process them individually
                     date_headers = driver.find_elements(By.CSS_SELECTOR, "h4")
                     logger.info(f"Found {len(date_headers)} possible date headers")
@@ -103,6 +136,125 @@ class UniversalLottoScraper:
             driver.quit()
         
         return self._clean_results()
+    
+    def _handle_state_restriction(self, driver, preferred_state="NSW"):
+        """Handle state restriction message and change state if needed"""
+        from selenium.webdriver.common.by import By
+        from selenium.webdriver.support.ui import WebDriverWait
+        from selenium.webdriver.support import expected_conditions as EC
+        from selenium.common.exceptions import TimeoutException, NoSuchElementException
+        
+        try:
+            # Check if the state restriction message is present
+            restriction_text = "not available in Queensland"
+            try:
+                state_message = driver.find_element(By.XPATH, f"//*[contains(text(), '{restriction_text}')]")
+                if state_message:
+                    self._take_screenshot(driver, "state_restriction_detected.png")
+                    logger.info("State restriction detected. Attempting to change state...")
+            except NoSuchElementException:
+                logger.debug("No state restriction detected")
+                return
+            
+            # Try to click the state selector to open the dropdown
+            try:
+                # Look for the state selector with class that contains 'StateSelector' or by text content
+                state_selector = driver.find_element(
+                    By.XPATH,
+                    "//span[contains(text(), 'State:') or contains(@class, 'CurrentState')]"
+                )
+                state_selector.click()
+                logger.info("Clicked state selector to open dropdown")
+                
+                # Wait for dropdown to appear
+                time.sleep(1)
+                
+                # Find the preferred state in the dropdown list
+                state_items = driver.find_elements(By.CSS_SELECTOR, "li a[role='button']")
+                logger.info(f"Found {len(state_items)} state options")
+                
+                # Find and click on the preferred state
+                for item in state_items:
+                    if item.text.strip() == preferred_state:
+                        logger.info(f"Clicking on state: {preferred_state}")
+                        item.click()
+                        time.sleep(3)  # Wait for page to update
+                        self._take_screenshot(driver, "after_state_change.png")
+                        return
+                        
+                logger.warning(f"Could not find {preferred_state} in dropdown options")
+                
+                # If preferred state not found, try clicking NSW, VIC, or OTHER as fallbacks
+                fallback_states = ["NSW", "VIC", "OTHER"]
+                for fallback in fallback_states:
+                    for item in state_items:
+                        if item.text.strip() == fallback:
+                            logger.info(f"Trying fallback state: {fallback}")
+                            item.click()
+                            time.sleep(3)  # Wait for page to update
+                            self._take_screenshot(driver, "after_state_change.png")
+                            return
+                            
+            except Exception as e:
+                # Try a more direct approach with the specific CSS classes from the HTML
+                try:
+                    logger.info("Trying alternative method for state selection")
+                    
+                    # Click on the state dropdown directly by its class
+                    current_state = driver.find_element(By.CSS_SELECTOR, ".css-12fwdzf-CurrentState")
+                    current_state.click()
+                    logger.info("Clicked on state dropdown")
+                    time.sleep(1)
+                    
+                    # Find all state options by their CSS class
+                    state_options = driver.find_elements(By.CSS_SELECTOR, ".css-7xvb4k-State")
+                    logger.info(f"Found {len(state_options)} state options with CSS selector")
+                    
+                    for option in state_options:
+                        if option.text.strip() == preferred_state:
+                            logger.info(f"Clicking on state: {preferred_state}")
+                            option.click()
+                            time.sleep(3)  # Wait for page to update
+                            self._take_screenshot(driver, "after_state_change.png")
+                            return
+                            
+                    # Try fallbacks
+                    for fallback in ["NSW", "VIC", "OTHER"]:
+                        for option in state_options:
+                            if option.text.strip() == fallback:
+                                logger.info(f"Using fallback state: {fallback}")
+                                option.click()
+                                time.sleep(3)
+                                self._take_screenshot(driver, "after_state_change.png")
+                                return
+                                
+                except Exception as nested_e:
+                    logger.error(f"Error in alternative state selection: {str(nested_e)}")
+                
+            # Try JavaScript click as a last resort
+            try:
+                logger.info(f"Attempting JavaScript click for state: {preferred_state}")
+                script = f"""
+                var stateItems = document.querySelectorAll('.css-7xvb4k-State');
+                for(var i=0; i < stateItems.length; i++) {{
+                    if(stateItems[i].textContent.trim() === '{preferred_state}') {{
+                        stateItems[i].click();
+                        return true;
+                    }}
+                }}
+                return false;
+                """
+                success = driver.execute_script(script)
+                if success:
+                    logger.info(f"JavaScript click on {preferred_state} succeeded")
+                    time.sleep(3)
+                else:
+                    logger.warning(f"JavaScript could not find {preferred_state}")
+            except Exception as js_error:
+                logger.error(f"Error with JavaScript click: {str(js_error)}")
+                
+        except Exception as e:
+            logger.error(f"Error handling state restriction: {str(e)}")
     
     def _process_draw_header_selenium(self, header):
         """Extract and validate draw information from header using Selenium"""
@@ -285,6 +437,22 @@ class UniversalLottoScraper:
             end_date=end_date,
             years_back=years_back
         )
+
+    def _take_screenshot(self, driver, filename=None):
+        """Take a screenshot to document page state"""
+        try:
+            if filename is None:
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                filename = f"screenshot_{timestamp}.png"
+            
+            screenshots_dir = Path("screenshots")
+            screenshots_dir.mkdir(exist_ok=True)
+            
+            screenshot_path = screenshots_dir / filename
+            driver.save_screenshot(str(screenshot_path))
+            logger.info(f"Screenshot saved to {screenshot_path}")
+        except Exception as e:
+            logger.error(f"Error taking screenshot: {str(e)}")
 
 def run_scraper(start_date=None, end_date=None, lottery_type="saturday_lotto", years_back=3):
     """Main function to run the scraper with optional parameters"""
