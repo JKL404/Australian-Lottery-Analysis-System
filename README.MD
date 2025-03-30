@@ -63,6 +63,8 @@ lotto_analysis/
 python3 lotto_gui.py
 ```
 
+![GUI Screenshot](screenshots/gui_screenshot.png)
+
 The GUI provides a comprehensive interface with the following features:
 - Select from six Australian lottery types
 - Specify how many years of historical data to analyze
