@@ -198,8 +198,6 @@ Apply chi-square tests and other statistical methods to validate the randomness 
 ### Model Evaluation
 Compare the performance of different prediction models against historical data to determine the most effective approach.
 
-### NOTE:
-While Running this app, it will open chrome browser for you to fetch latest data(from lotter website), For some-region it might shows data not available on your state (Specially QLD) for that case, quickly switch to Other Region(NSW) within 2-3 seconds of browser loading.
 
 ---
 
