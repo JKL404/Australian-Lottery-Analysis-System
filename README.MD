@@ -63,7 +63,7 @@ lotto_analysis/
 python3 lotto_gui.py
 ```
 
-The GUI provides an easy-to-use interface with the following features:
+The GUI provides a comprehensive interface with the following features:
 - Select from six Australian lottery types
 - Specify how many years of historical data to analyze
 - Control the number of predictions to generate
@@ -71,10 +71,20 @@ The GUI provides an easy-to-use interface with the following features:
 - Select output format (CSV or JSON)
 - Enable/disable visualizations and interactive charts
 - Generate detailed analysis reports
-- View real-time progress and logs during processing
-- Access predictions and analysis reports with one click
+- View real-time progress and color-coded logs during processing
+- Save logs to a file for future reference
+- Keyboard shortcuts for common actions (F5, F6, F7, Ctrl+S)
+- Tooltips explaining the purpose of each option
+- Custom output directory selection
+- Help tab with detailed instructions
 
-![GUI Screenshot](screenshots/gui_screenshot.png)
+### Key GUI Features:
+- **Color-coded logs**: Different colors for info, warnings, errors, and success messages
+- **Real-time progress display**: See the analysis progress as it happens
+- **Elapsed time tracking**: Monitor how long the analysis has been running
+- **Intuitive layout**: Organized interface with clear sections
+- **Tooltips**: Hover over elements to see explanations
+- **Keyboard shortcuts**: Quick access to common functions
 
 ### Command Line Interface
 

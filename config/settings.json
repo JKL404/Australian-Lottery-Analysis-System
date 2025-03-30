@@ -1,0 +1,12 @@
+{
+    "theme": "dark",
+    "output_dir": "results",
+    "lottery": "powerball",
+    "years": 1,
+    "predictions": 10,
+    "model": "advanced",
+    "format": "csv",
+    "visualize": true,
+    "interactive": false,
+    "report": true
+}
